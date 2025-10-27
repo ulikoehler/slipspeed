@@ -1,10 +1,10 @@
-# SLIPstream
+# SLIPstream-codec
 
-A pure-Rust implementation of the **Serial Line Internet Protocol (SLIP)** encoder and decoder with support for in-memory buffers and streaming I/O.
+A pure-Rust implementation of the **Serial Line Internet Protocol (SLIP)** encoder and decoder with support for **in-memory buffers** as well as **streaming I/O**.
 
 The crate exposes convenience helpers for encoding and decoding byte slices as well as `SlipWriter` and `SlipReader` wrappers for any `std::io::Write` or `std::io::Read` implementor.
 
-A C/C++ port of this library, focused on embedded systems, is available at [libslipstream](https://github.com/ulikoehler/libslipstream).
+A C/C++ port of this library, focused on embedded systems, is available at [libslipstream](https://github.com/ulikoehler/libslipstream), (but sadly, the [slipstream](https://crates.io/crates/slipstream) crate name on crates.io is already taken.
 
 ## Frame Structure
 
