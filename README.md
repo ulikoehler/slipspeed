@@ -6,6 +6,25 @@ The crate exposes convenience helpers for encoding and decoding byte slices as w
 
 A C/C++ port of this library, focused on embedded systems, is available at [libslipstream](https://github.com/ulikoehler/libslipstream), (but sadly, the [slipstream](https://crates.io/crates/slipstream) crate name on crates.io is already taken.
 
+## Performance
+
+The integrated benchmark encodes random frames of varying lengths and reports throughput for encoding and decoding. Typical performance is often higher as random frames may include lots of characters that need escaping. To run the benchmark example:
+
+```sh
+cargo run --release --example benchmark
+```
+
+Example results on a AMD Ryzen 5 3600 CPU:
+
+```
+Frames processed: 1000000
+Encoded bytes: 65952678
+Encoding took: 224.759907ms (224.76 ns/frame)
+Encoding throughput: 293.44 MB/s
+Decoding took: 279.670968ms (279.67 ns/frame)
+Decoding throughput: 235.82 MB/s
+```
+
 ## Frame Structure
 
 SLIP is specified in [RFC 1055](https://datatracker.ietf.org/doc/html/rfc1055) and uses the following conventions:
@@ -72,3 +91,25 @@ See `examples/stream.rs` for the full example.
 - `cargo run --example async_codec --features async-codec` demonstrates the runtime-agnostic `asynchronous_codec` integration.
 - `cargo run --example tokio_codec --features tokio-codec` showcases usage with Tokio's `duplex` streams and `tokio_util::codec::Framed`.
 - `cargo run --example benchmark` performs a reproducible encoding and decoding micro-benchmark over pseudo-random frames.
+
+### Benchmark example
+
+The `examples/benchmark.rs` program performs a reproducible micro-benchmark using a fixed-seed
+LCG (Linear Congruential Generator). By default it generates a large number of small random
+frames and reports:
+
+- total frames processed
+- total encoded bytes
+- wall-clock time for encoding and decoding
+- per-frame average (ns/frame)
+
+This example is intended as a simple throughput sanity check rather than a rigorous
+benchmark (it prints elapsed times to stdout). To run the example:
+
+```text
+cargo run --example benchmark
+```
+
+To make the example quicker during development, lower the `FRAME_COUNT` constant at the
+top of the example file (for example to `20_000`). The RNG seed is fixed (0xDEADBEEF)
+for reproducible runs.
