@@ -1,4 +1,6 @@
-# SLIPstream-codec
+# SLIPspeed
+
+![SLIPspeed logo](docs/SLIPspeed.png)
 
 A pure-Rust implementation of the **Serial Line Internet Protocol (SLIP)** encoder and decoder with support for **in-memory buffers** as well as **streaming I/O**.
 
@@ -8,21 +10,34 @@ A C/C++ port of this library, focused on embedded systems, is available at [libs
 
 ## Performance
 
-The integrated benchmark encodes random frames of varying lengths and reports throughput for encoding and decoding. Typical performance is often higher as random frames may include lots of characters that need escaping. To run the benchmark example:
+SLIPspeed attempts to be as fast as the speed of light will allow. This is achieved
+
+Generally, passing more than one byte at a time can improve performance by reducing the overhead of multiple function calls and allowing for better optimization by utilizing `memchr` to quickly locate special characters in the input data. This approach uses vectorized instructions and efficient memory scanning techniques to process larger chunks of data in a single operation, leading to significant speed improvements compared to processing one byte at a time.
+
+The integrated benchmark encodes ASCII fraes random frames of varying lengths and reports throughput for encoding and decoding. Performance is higher for ASCII frames, as random frames may include lots of characters that need escaping. To run the benchmark example:
 
 ```sh
 cargo run --release --example benchmark
 ```
 
-Example results on a AMD Ryzen 5 3600 CPU:
+Example results on a AMD Ryzen 5 3600 CPU (64 byte frames, 5 million frames):
 
 ```text
-Frames processed: 1000000
-Encoded bytes: 65952678
-Encoding took: 224.759907ms (224.76 ns/frame)
-Encoding throughput: 293.44 MB/s
-Decoding took: 279.670968ms (279.67 ns/frame)
-Decoding throughput: 235.82 MB/s
+--- Benchmark: random bytes ---
+Frames processed: 5000000
+Encoded bytes: 650000616
+Encoding took: 784.494861ms (156.90 ns/frame)
+Encoding throughput: 828.56 MB/s
+Decoding took: 952.629859ms (190.53 ns/frame)
+Decoding throughput: 682.32 MB/s
+
+--- Benchmark: ASCII-only bytes ---
+Frames processed: 5000000
+Encoded bytes: 645000000
+Encoding took: 223.258875ms (44.65 ns/frame)
+Encoding throughput: 2889.02 MB/s
+Decoding took: 505.236865ms (101.05 ns/frame)
+Decoding throughput: 1276.63 MB/s
 ```
 
 ## Frame Structure
