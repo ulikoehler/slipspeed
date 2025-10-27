@@ -17,7 +17,7 @@ Generally, passing more than one byte at a time can improve performance by reduc
 The integrated benchmark encodes ASCII fraes random frames of varying lengths and reports throughput for encoding and decoding. Performance is higher for ASCII frames, as random frames may include lots of characters that need escaping. To run the benchmark example:
 
 ```sh
-cargo run --release --example benchmark
+RUSTFLAGS="-C target-cpu=native" cargo run --release --example benchmark
 ```
 
 Example results on a AMD Ryzen 5 3600 CPU (64 byte frames, 5 million frames):
@@ -26,18 +26,18 @@ Example results on a AMD Ryzen 5 3600 CPU (64 byte frames, 5 million frames):
 --- Benchmark: random bytes ---
 Frames processed: 5000000
 Encoded bytes: 650000616
-Encoding took: 784.494861ms (156.90 ns/frame)
-Encoding throughput: 828.56 MB/s
-Decoding took: 952.629859ms (190.53 ns/frame)
-Decoding throughput: 682.32 MB/s
+Encoding took: 697.361468ms (139.47 ns/frame)
+Encoding throughput: 932.09 MB/s
+Decoding took: 908.336552ms (181.67 ns/frame)
+Decoding throughput: 715.59 MB/s
 
 --- Benchmark: ASCII-only bytes ---
 Frames processed: 5000000
 Encoded bytes: 645000000
-Encoding took: 223.258875ms (44.65 ns/frame)
-Encoding throughput: 2889.02 MB/s
-Decoding took: 505.236865ms (101.05 ns/frame)
-Decoding throughput: 1276.63 MB/s
+Encoding took: 226.643427ms (45.33 ns/frame)
+Encoding throughput: 2845.88 MB/s
+Decoding took: 488.094976ms (97.62 ns/frame)
+Decoding throughput: 1321.46 MB/s
 ```
 
 ## Frame Structure

@@ -1,11 +1,11 @@
 [package]
-name = "slipstream"
+name = "slipspeed"
 version = "1.0.0"
 edition = "2021"
 authors = ["Uli Köhler"]
-description = "SLIP (Serial Line Internet Protocol) encoder and decoder with streaming support"
+description = "The fastest SLIP codec for Rust"
 license = "Apache-2.0"
-repository = "https://github.com/ulikoehler/slipstream-rs"
+repository = "https://github.com/ulikoehler/slipspeed"
 readme = "README.md"
 keywords = ["slip", "serial", "codec", "stream"]
 categories = ["encoding", "network-programming"]
