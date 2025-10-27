@@ -6,11 +6,11 @@ A pure-Rust implementation of the **Serial Line Internet Protocol (SLIP)** encod
 
 The crate exposes convenience helpers for encoding and decoding byte slices as well as `SlipWriter` and `SlipReader` wrappers for any `std::io::Write` or `std::io::Read` implementor.
 
-A C/C++ port of this library, focused on embedded systems, is available at [libslipstream](https://github.com/ulikoehler/libslipstream), (but sadly, the [slipstream](https://crates.io/crates/slipstream) crate name on crates.io is already taken.
+A C/C++ port of this library, focused on embedded systems, is available at [libslipstream](https://github.com/ulikoehler/libslipstream), (but sadly, the [slipstream](https://crates.io/crates/slipstream) crate name on crates.io is already taken).
 
 ## Performance
 
-SLIPspeed attempts to be as fast as the speed of light will allow. This is achieved
+SLIPspeed attempts to be as fast as the speed of light will allow.
 
 Generally, passing more than one byte at a time can improve performance by reducing the overhead of multiple function calls and allowing for better optimization by utilizing `memchr` to quickly locate special characters in the input data. This approach uses vectorized instructions and efficient memory scanning techniques to process larger chunks of data in a single operation, leading to significant speed improvements compared to processing one byte at a time.
 
