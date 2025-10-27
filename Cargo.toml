@@ -14,4 +14,17 @@ categories = ["encoding", "network-programming"]
 name = "slipstream"
 path = "src/lib.rs"
 
+[features]
+default = []
+async-codec = ["dep:asynchronous-codec", "dep:bytes"]
+tokio-codec = ["dep:tokio-util", "dep:bytes"]
+
 [dependencies]
+asynchronous-codec = { version = "0.6", optional = true }
+tokio-util = { version = "0.7", optional = true, features = ["codec"] }
+bytes = { version = "1", optional = true }
+
+[dev-dependencies]
+bytes = "1"
+futures = "0.3"
+tokio = { version = "1", features = ["macros", "rt", "io-util"] }

@@ -4,6 +4,11 @@ use std::error::Error;
 use std::fmt;
 use std::io::{self, Read, Write};
 
+#[cfg(feature = "async-codec")]
+pub mod async_codec;
+#[cfg(feature = "tokio-codec")]
+pub mod tokio_codec;
+
 /// SLIP END byte (0xC0).
 pub const END: u8 = 0xC0;
 /// SLIP ESC byte (0xDB).
@@ -501,8 +506,8 @@ impl<R: Read> SlipReader<R> {
 }
 
 #[derive(Default)]
-struct DecoderState {
-    last_was_esc: bool,
+pub(crate) struct DecoderState {
+    pub(crate) last_was_esc: bool,
 }
 
 fn process_byte<F>(state: &mut DecoderState, byte: u8, mut on_byte: F) -> Result<bool>

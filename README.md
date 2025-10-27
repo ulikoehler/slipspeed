@@ -61,3 +61,14 @@ See `examples/stream.rs` for the full example.
 - `encode_frame`, `decode_frames`, and `decode_frames_with_remainder` for slice-based workflows.
 - `encoded_len` and `decoded_lengths` to inspect frame sizes without materialising payloads.
 - `SlipReader::read_frame_length` and `SlipReader::take_remainder` for streaming scenarios that require sizing or recovery after truncated input.
+
+## Cargo Features
+
+- `async-codec` enables a `slipstream::async_codec::SlipCodec` implementing the `asynchronous_codec` traits for runtime-agnostic async I/O.
+- `tokio-codec` enables a `slipstream::tokio_codec::SlipCodec` compatible with `tokio_util::codec` Framed adapters.
+
+## Additional Examples
+
+- `cargo run --example async_codec --features async-codec` demonstrates the runtime-agnostic `asynchronous_codec` integration.
+- `cargo run --example tokio_codec --features tokio-codec` showcases usage with Tokio's `duplex` streams and `tokio_util::codec::Framed`.
+- `cargo run --example benchmark` performs a reproducible encoding and decoding micro-benchmark over pseudo-random frames.
