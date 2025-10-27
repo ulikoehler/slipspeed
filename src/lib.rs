@@ -3,6 +3,7 @@
 use std::error::Error;
 use std::fmt;
 use std::io::{self, Read, Write};
+use memchr::{memchr2, memchr2_iter};
 
 #[cfg(feature = "async-codec")]
 pub mod async_codec;
@@ -98,7 +99,25 @@ impl From<io::Error> for SlipError {
 /// The returned frame always ends with the [`END`] delimiter. See `examples/basic.rs`
 /// for an end-to-end demonstration.
 pub fn encode_frame(data: &[u8]) -> Vec<u8> {
-    encode_iter(data.iter().copied())
+    // Fast path for slices: pre-size and scan using memchr2.
+    let mut out = Vec::with_capacity(encoded_len_bytes(data));
+    let mut start = 0usize;
+    for pos in memchr2_iter(END, ESC, data) {
+        if pos > start {
+            out.extend_from_slice(&data[start..pos]);
+        }
+        match data[pos] {
+            END => out.extend_from_slice(&[ESC, ESC_END]),
+            ESC => out.extend_from_slice(&[ESC, ESC_ESC]),
+            _ => unreachable!(),
+        }
+        start = pos + 1;
+    }
+    if start < data.len() {
+        out.extend_from_slice(&data[start..]);
+    }
+    out.push(END);
+    out
 }
 
 /// Encode an arbitrary iterator of bytes as a SLIP frame and return the encoded data.
@@ -177,7 +196,56 @@ where
 /// assert!(!remainder.escape_pending);
 /// ```
 pub fn decode_frames_with_remainder(bytes: &[u8]) -> Result<(Vec<Vec<u8>>, FrameRemainder)> {
-    decode_frames_iter_with_remainder(bytes.iter().copied())
+    let mut frames: Vec<Vec<u8>> = Vec::new();
+    let mut buffer: Vec<u8> = Vec::new();
+    let mut i = 0usize;
+    let mut escape_pending = false;
+
+    while i < bytes.len() {
+        if escape_pending {
+            let code = bytes[i];
+            match code {
+                ESC_END => buffer.push(END),
+                ESC_ESC => buffer.push(ESC),
+                invalid => return Err(SlipError::InvalidEscape(invalid)),
+            }
+            escape_pending = false;
+            i += 1;
+            continue;
+        }
+
+        match memchr2(END, ESC, &bytes[i..]) {
+            Some(rel) => {
+                let pos = i + rel;
+                if pos > i {
+                    buffer.extend_from_slice(&bytes[i..pos]);
+                }
+                match bytes[pos] {
+                    END => {
+                        frames.push(std::mem::take(&mut buffer));
+                    }
+                    ESC => {
+                        escape_pending = true;
+                    }
+                    _ => unreachable!(),
+                }
+                i = pos + 1;
+            }
+            None => {
+                // No more specials: copy remainder and finish
+                buffer.extend_from_slice(&bytes[i..]);
+                i = bytes.len();
+            }
+        }
+    }
+
+    Ok((
+        frames,
+        FrameRemainder {
+            decoded: buffer,
+            escape_pending,
+        },
+    ))
 }
 
 /// Iterator variant of [`decode_frames_with_remainder`].
@@ -226,6 +294,16 @@ where
     len
 }
 
+/// Optimized encoded length for byte slices.
+fn encoded_len_bytes(bytes: &[u8]) -> usize {
+    // Each END/ESC expands to two bytes; others stay as one. Add 1 for trailing END.
+    let mut count = 0usize;
+    for _ in memchr2_iter(END, ESC, bytes) {
+        count += 1;
+    }
+    bytes.len() + count + 1
+}
+
 /// Determine the decoded length of each SLIP frame in the provided input without materialising the payloads.
 ///
 /// ```
@@ -235,7 +313,57 @@ where
 /// assert_eq!(decoded_lengths(&encoded).unwrap(), vec![2, 0]);
 /// ```
 pub fn decoded_lengths(bytes: &[u8]) -> Result<Vec<usize>> {
-    decoded_lengths_iter(bytes.iter().copied())
+    let mut lengths: Vec<usize> = Vec::new();
+    let mut current = 0usize;
+    let mut i = 0usize;
+    let mut escape_pending = false;
+
+    while i < bytes.len() {
+        if escape_pending {
+            let code = bytes[i];
+            match code {
+                ESC_END | ESC_ESC => {
+                    current += 1;
+                }
+                invalid => return Err(SlipError::InvalidEscape(invalid)),
+            }
+            escape_pending = false;
+            i += 1;
+            continue;
+        }
+
+        match memchr2(END, ESC, &bytes[i..]) {
+            Some(rel) => {
+                let pos = i + rel;
+                // bytes between i..pos are payload
+                current += pos - i;
+                match bytes[pos] {
+                    END => {
+                        lengths.push(current);
+                        current = 0;
+                    }
+                    ESC => {
+                        escape_pending = true;
+                    }
+                    _ => unreachable!(),
+                }
+                i = pos + 1;
+            }
+            None => {
+                // No more specials: remaining are payload
+                current += bytes.len() - i;
+                i = bytes.len();
+            }
+        }
+    }
+
+    if escape_pending {
+        return Err(SlipError::IncompleteEscape);
+    }
+    if current != 0 {
+        return Err(SlipError::UnexpectedEndOfFrame);
+    }
+    Ok(lengths)
 }
 
 /// Iterator variant of [`decoded_lengths`].
@@ -314,7 +442,9 @@ impl<W> SlipWriter<W> {
 impl<W: Write> SlipWriter<W> {
     /// Encode the provided payload as a SLIP frame and write it to the underlying sink.
     pub fn write_frame(&mut self, payload: &[u8]) -> Result<()> {
-        encode_into_writer(payload.iter().copied(), &mut self.inner)
+        // Use the optimized slice-based encoder and write once to reduce syscall overhead.
+        let frame = encode_frame(payload);
+        self.inner.write_all(&frame).map_err(SlipError::from)
     }
 
     /// Encode any iterator of bytes as a SLIP frame and write it to the underlying sink.

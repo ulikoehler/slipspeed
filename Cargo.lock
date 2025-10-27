@@ -159,6 +159,7 @@ dependencies = [
  "asynchronous-codec",
  "bytes",
  "futures",
+ "memchr",
  "tokio",
  "tokio-util",
 ]

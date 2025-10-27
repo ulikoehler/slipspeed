@@ -23,6 +23,7 @@ tokio-codec = ["dep:tokio-util", "dep:bytes"]
 asynchronous-codec = { version = "0.6", optional = true }
 tokio-util = { version = "0.7", optional = true, features = ["codec"] }
 bytes = { version = "1", optional = true }
+memchr = "2"
 
 [dev-dependencies]
 bytes = "1"

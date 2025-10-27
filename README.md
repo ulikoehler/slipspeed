@@ -16,7 +16,7 @@ cargo run --release --example benchmark
 
 Example results on a AMD Ryzen 5 3600 CPU:
 
-```
+```text
 Frames processed: 1000000
 Encoded bytes: 65952678
 Encoding took: 224.759907ms (224.76 ns/frame)
