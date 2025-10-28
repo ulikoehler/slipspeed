@@ -1,4 +1,4 @@
-use slipstream::{Result, SlipReader, SlipWriter};
+use slipspeed::{Result, SlipReader, SlipWriter};
 use std::io::Cursor;
 
 fn main() -> Result<()> {

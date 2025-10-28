@@ -1,4 +1,4 @@
-use slipstream::{decode_frame, encode_frame, Result};
+use slipspeed::{decode_frame, encode_frame, Result};
 
 fn main() -> Result<()> {
     let payload = b"hello, slip";

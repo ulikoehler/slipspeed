@@ -20,7 +20,7 @@
 //! `FRAME_COUNT` near the top of the example (or set it to e.g. 20_000).
 use std::time::Instant;
 
-fn main() -> slipstream::Result<()> {
+fn main() -> slipspeed::Result<()> {
     // Default number of frames for the benchmark. You can override this for
     // quick smoke-tests by setting the BENCH_FRAMES environment variable,
     // e.g. `BENCH_FRAMES=20_000 cargo run --example benchmark`.
@@ -58,13 +58,13 @@ fn run_bench(label: &str, frames: &[Vec<u8>]) -> slipstream::Result<()> {
     let frame_count = frames.len();
 
     let start = Instant::now();
-    let encoded: Vec<Vec<u8>> = frames.iter().map(|frame| slipstream::encode_frame(frame)).collect();
+    let encoded: Vec<Vec<u8>> = frames.iter().map(|frame| slipspeed::encode_frame(frame)).collect();
     let encode_elapsed = start.elapsed();
 
     let concatenated: Vec<u8> = encoded.iter().flat_map(|frame| frame.iter().copied()).collect();
 
     let start = Instant::now();
-    let decoded = slipstream::decode_frames(&concatenated)?;
+    let decoded = slipspeed::decode_frames(&concatenated)?;
     let decode_elapsed = start.elapsed();
 
     assert_eq!(frames, &decoded, "round-trip mismatch for {label}");

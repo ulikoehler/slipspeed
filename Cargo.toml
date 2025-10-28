@@ -1,6 +1,6 @@
 [package]
 name = "slipspeed"
-version = "1.0.0"
+version = "2.0.0"
 edition = "2021"
 authors = ["Uli Köhler"]
 description = "The fastest SLIP codec for Rust"
@@ -11,7 +11,7 @@ keywords = ["slip", "serial", "codec", "stream"]
 categories = ["encoding", "network-programming"]
 
 [lib]
-name = "slipstream"
+name = "slipspeed"
 path = "src/lib.rs"
 
 [features]

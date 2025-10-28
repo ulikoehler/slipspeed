@@ -7,9 +7,9 @@ fn main() {
 
 #[cfg(feature = "tokio-codec")]
 #[tokio::main(flavor = "current_thread")]
-async fn main() -> slipstream::Result<()> {
+async fn main() -> slipspeed::Result<()> {
     use futures::{SinkExt, StreamExt};
-    use slipstream::tokio_codec::SlipCodec;
+    use slipspeed::tokio_codec::SlipCodec;
     use tokio::io::duplex;
     use tokio_util::codec::Framed;
 

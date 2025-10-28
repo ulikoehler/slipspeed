@@ -186,7 +186,7 @@ where
 /// Decode SLIP frames and also return any buffered remainder when the input ends without a trailing [`END`].
 ///
 /// ```
-/// use slipstream::{decode_frames_with_remainder, encode_frame};
+/// use slipspeed::{decode_frames_with_remainder, encode_frame};
 ///
 /// let mut truncated = encode_frame(b"hi");
 /// truncated.pop();

@@ -56,7 +56,7 @@ In contrast to the [simple_slip](https://crates.io/crates/simple_slip) crate, we
 ## Quick Start
 
 ```rust
-use slipstream::{decode_frame, encode_frame, Result};
+use slipspeed::{decode_frame, encode_frame, Result};
 
 fn main() -> Result<()> {
 	let frame = encode_frame(b"hello");
@@ -71,7 +71,7 @@ Run `cargo run --example basic` for a complete program.
 ## Streaming I/O
 
 ```rust
-use slipstream::{SlipReader, SlipWriter, Result};
+use slipspeed::{SlipReader, SlipWriter, Result};
 use std::io::Cursor;
 
 fn main() -> Result<()> {
@@ -98,8 +98,8 @@ See `examples/stream.rs` for the full example.
 
 ## Cargo Features
 
-- `async-codec` enables a `slipstream::async_codec::SlipCodec` implementing the `asynchronous_codec` traits for runtime-agnostic async I/O.
-- `tokio-codec` enables a `slipstream::tokio_codec::SlipCodec` compatible with `tokio_util::codec` Framed adapters.
+- `async-codec` enables a `slipspeed::async_codec::SlipCodec` implementing the `asynchronous_codec` traits for runtime-agnostic async I/O.
+- `tokio-codec` enables a `slipspeed::tokio_codec::SlipCodec` compatible with `tokio_util::codec` Framed adapters.
 
 ## Additional Examples
 

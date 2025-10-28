@@ -6,10 +6,10 @@ fn main() {
 }
 
 #[cfg(feature = "async-codec")]
-fn main() -> slipstream::Result<()> {
+fn main() -> slipspeed::Result<()> {
     use asynchronous_codec::{FramedRead, FramedWrite};
     use futures::{executor::block_on, io::Cursor, sink::SinkExt, stream::StreamExt};
-    use slipstream::async_codec::SlipCodec;
+    use slipspeed::async_codec::SlipCodec;
 
     block_on(async move {
         let cursor = Cursor::new(Vec::new());
