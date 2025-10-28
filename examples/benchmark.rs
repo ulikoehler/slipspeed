@@ -54,7 +54,7 @@ fn ns_per_item(duration: std::time::Duration, count: usize) -> f64 {
     duration.as_nanos() as f64 / count as f64
 }
 
-fn run_bench(label: &str, frames: &[Vec<u8>]) -> slipstream::Result<()> {
+fn run_bench(label: &str, frames: &[Vec<u8>]) -> slipspeed::Result<()> {
     let frame_count = frames.len();
 
     let start = Instant::now();

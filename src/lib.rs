@@ -276,7 +276,7 @@ where
 /// Compute the encoded length (including the trailing [`END`] delimiter) without allocating.
 ///
 /// ```
-/// use slipstream::{encoded_len, END, ESC};
+/// use slipspeed::{encoded_len, END, ESC};
 ///
 /// assert_eq!(encoded_len([END, ESC, 0x01]), 6);
 /// ```
@@ -307,7 +307,7 @@ fn encoded_len_bytes(bytes: &[u8]) -> usize {
 /// Determine the decoded length of each SLIP frame in the provided input without materialising the payloads.
 ///
 /// ```
-/// use slipstream::{decoded_lengths, encode_frame};
+/// use slipspeed::{decoded_lengths, encode_frame};
 ///
 /// let encoded = [encode_frame(b"hi"), encode_frame(&[])].concat();
 /// assert_eq!(decoded_lengths(&encoded).unwrap(), vec![2, 0]);
@@ -556,7 +556,7 @@ impl<R: Read> SlipReader<R> {
     /// Read the next SLIP frame and return only its decoded length.
     ///
     /// ```
-    /// use slipstream::{SlipReader, encode_frame, Result};
+    /// use slipspeed::{SlipReader, encode_frame, Result};
     /// use std::io::Cursor;
     ///
     /// # fn main() -> Result<()> {
@@ -602,7 +602,7 @@ impl<R: Read> SlipReader<R> {
     /// Take ownership of any pending decoded bytes accumulated for the current, incomplete frame.
     ///
     /// ```
-    /// use slipstream::{SlipReader, encode_frame, SlipError, Result};
+    /// use slipspeed::{SlipReader, encode_frame, SlipError, Result};
     /// use std::io::Cursor;
     ///
     /// # fn main() -> Result<()> {
