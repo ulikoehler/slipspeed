@@ -1,5 +1,7 @@
 # SLIPspeed
 
+[![CI](https://github.com/ulikoehler/slipstream-rs/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ulikoehler/slipstream-rs/actions/workflows/ci.yml)
+
 ![SLIPspeed logo](docs/SLIPspeed.png)
 
 A pure-Rust implementation of the **Serial Line Internet Protocol (SLIP)** encoder and decoder with support for **in-memory buffers** as well as **streaming I/O**.
