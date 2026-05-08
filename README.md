@@ -30,24 +30,24 @@ The integrated benchmark encodes ASCII fraes random frames of varying lengths an
 RUSTFLAGS="-C target-cpu=native" cargo run --release --example benchmark
 ```
 
-Example results on a AMD Ryzen 5 3600 CPU (64 byte frames, 5 million frames):
+Example results on a AMD Ryzen 9 7950X3D (64 byte frames, 5 million frames):
 
 ```text
 --- Benchmark: random bytes ---
 Frames processed: 5000000
 Encoded bytes: 650000616
-Encoding took: 697.361468ms (139.47 ns/frame)
-Encoding throughput: 932.09 MB/s
-Decoding took: 908.336552ms (181.67 ns/frame)
-Decoding throughput: 715.59 MB/s
+Encoding took: 491.51378ms (98.30 ns/frame)
+Encoding throughput: 1322.45 MB/s
+Decoding took: 585.246155ms (117.05 ns/frame)
+Decoding throughput: 1110.64 MB/s
 
 --- Benchmark: ASCII-only bytes ---
 Frames processed: 5000000
 Encoded bytes: 645000000
-Encoding took: 226.643427ms (45.33 ns/frame)
-Encoding throughput: 2845.88 MB/s
-Decoding took: 488.094976ms (97.62 ns/frame)
-Decoding throughput: 1321.46 MB/s
+Encoding took: 128.59261ms (25.72 ns/frame)
+Encoding throughput: 5015.84 MB/s
+Decoding took: 340.757892ms (68.15 ns/frame)
+Decoding throughput: 1892.84 MB/s
 ```
 
 ## Frame Structure
