@@ -8,7 +8,15 @@ A pure-Rust implementation of the **Serial Line Internet Protocol (SLIP)** encod
 
 The crate exposes convenience helpers for encoding and decoding byte slices as well as `SlipWriter` and `SlipReader` wrappers for any `std::io::Write` or `std::io::Read` implementor.
 
-A C/C++ port of this library, focused on embedded systems, is available at [libslipstream](https://github.com/ulikoehler/libslipstream), (but sadly, the [slipstream](https://crates.io/crates/slipstream) crate name on crates.io is already taken).
+## Compatible Implementations
+
+SLIPspeed is part of a family of compatible SLIP implementations across different programming languages:
+
+- **[libSLIPStream](https://github.com/ulikoehler/libSLIPStream)** - C++ implementation focused on embedded systems
+- **[PySLIPStream](https://github.com/ulikoehler/PySLIPStream)** - Python implementation with full parity to libSLIPStream
+- **SLIPspeed** - Rust implementation (this repository)
+
+All three implementations maintain full parity for SLIP encoding/decoding and CRC32 calculations, ensuring interoperability across language boundaries. The SLIPSpeed CI includes automated compatibility tests with libSLIPStream to verify this parity.
 
 ## Performance
 
