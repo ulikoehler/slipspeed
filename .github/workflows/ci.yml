@@ -57,7 +57,7 @@ jobs:
           path: target/coverage
 
   compatibility-tests:
-    name: Compatibility Tests with libSLIPStream
+    name: Compatibility Tests with libSLIPspeed
     runs-on: ubuntu-latest
     
     steps:
@@ -70,7 +70,7 @@ jobs:
         profile: minimal
         override: true
     
-    - name: Install libSLIPStream dependencies
+    - name: Install libSLIPspeed dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y build-essential cmake libgtest-dev
@@ -87,20 +87,20 @@ jobs:
           sudo cp lib/*.a /usr/lib/ || true
         fi
     
-    - name: Clone libSLIPStream
+    - name: Clone libSLIPspeed
       run: |
-        git clone https://github.com/ulikoehler/libSLIPStream.git /tmp/libSLIPStream
+        git clone https://github.com/ulikoehler/libSLIPspeed.git /tmp/libSLIPspeed
     
-    - name: Build libSLIPStream tests
+    - name: Build libSLIPspeed tests
       run: |
-        cd /tmp/libSLIPStream/test
+        cd /tmp/libSLIPspeed/test
         mkdir -p build && cd build
         cmake -DENABLE_COVERAGE=ON ..
         cmake --build .
     
-    - name: Run libSLIPStream tests
+    - name: Run libSLIPspeed tests
       run: |
-        cd /tmp/libSLIPStream/test/build
+        cd /tmp/libSLIPspeed/test/build
         ./test_all --gtest_filter="*CRC32*:*SLIP*"
     
     - name: Build SLIPSpeed
@@ -114,6 +114,6 @@ jobs:
     - name: Run compatibility tests
       run: |
         echo "Compatibility tests already run in previous steps:"
-        echo "✓ libSLIPStream C++ tests passed"
+        echo "✓ libSLIPspeed C++ tests passed"
         echo "✓ SLIPSpeed Rust tests passed"
         echo "Both implementations are compatible"
